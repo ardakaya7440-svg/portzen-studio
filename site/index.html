@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PORTZEN Studio İndir</title>
+    <meta name="description" content="PORTZEN Studio: Claude'un video tasarladığı, senin de bir video editöründe düzenlediğin ücretsiz masaüstü uygulaması. Windows ve Mac (Apple Silicon)." />
+    <meta property="og:title" content="PORTZEN Studio" />
+    <meta property="og:description" content="Videonu Claude tasarlasın, sen düzenle. Windows ve Mac (M1–M4) için ücretsiz." />
+    <meta property="og:image" content="assets/screenshot.webp" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      /* Layout idea: one dark brand world (PORTZEN navy, purple → pink); download cards are the page's single job. */
+      :root {
+        --ink: #0b0d1a;
+        --panel: #13162a;
+        --line: #262a45;
+        --text: #eef0fa;
+        --muted: #9aa0bf;
+        --purple: #7c5cff;
+        --pink: #ff6ec7;
+        --ok: #3ecf8e;
+        --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+        --font-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; }
+      body {
+        background: var(--ink);
+        color: var(--text);
+        font: 16px/1.6 var(--font-body);
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      img { max-width: 100%; height: auto; display: block; }
+      .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+      .glow {
+        position: absolute; inset: 0 0 auto 0; height: 760px; pointer-events: none; z-index: 0;
+        background:
+          radial-gradient(600px 420px at 12% 10%, rgba(124, 92, 255, 0.35), transparent 70%),
+          radial-gradient(560px 420px at 92% 38%, rgba(255, 110, 199, 0.22), transparent 70%);
+      }
+      header, main, footer { position: relative; z-index: 1; }
+
+      /* nav */
+      nav { display: flex; align-items: center; gap: 16px; padding: 22px 0; }
+      nav .brand img { height: 26px; width: auto; }
+      nav .spacer { flex: 1; }
+      .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+      .lang button {
+        font: 600 13px/1 var(--font-body); color: var(--muted); background: none; border: 0;
+        padding: 8px 12px; border-radius: 999px; cursor: pointer;
+      }
+      .lang button[aria-pressed="true"] { background: var(--text); color: var(--ink); }
+      .navlink { font-weight: 600; font-size: 14px; color: var(--muted); text-decoration: none; }
+      .navlink:hover { color: var(--text); }
+
+      /* hero */
+      .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding: 40px 0 56px; }
+      .badge {
+        display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;
+        color: var(--text); border: 1px solid var(--line); background: rgba(19, 22, 42, 0.7);
+        padding: 6px 12px; border-radius: 999px;
+      }
+      .badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+      h1 {
+        font: 900 clamp(38px, 5.4vw, 64px)/1.02 var(--font-display); letter-spacing: -0.03em;
+        margin: 18px 0 18px; text-wrap: balance;
+      }
+      h1 em {
+        font-style: normal;
+        background: linear-gradient(90deg, var(--purple), var(--pink));
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .lead { font-size: 18px; color: var(--muted); max-width: 52ch; margin: 0 0 28px; }
+      .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer;
+        font: 700 15px/1 var(--font-body); padding: 15px 20px; border-radius: 12px; border: 1px solid transparent;
+        transition: transform 0.15s ease, filter 0.15s ease;
+      }
+      .btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+      .btn:focus-visible, .lang button:focus-visible, .navlink:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+      .btn svg { width: 18px; height: 18px; flex: none; }
+      .btn.primary { background: linear-gradient(90deg, var(--purple), var(--pink)); color: #fff; }
+      .btn.secondary { background: var(--panel); border-color: var(--line); color: var(--text); }
+      .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+      .meta { margin-top: 14px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+      .shot {
+        border-radius: 14px; overflow: hidden; border: 1px solid var(--line);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(124, 92, 255, 0.15);
+        background: #000;
+      }
+
+      /* sections */
+      section { padding: 56px 0; border-top: 1px solid var(--line); }
+      h2 { font: 800 clamp(26px, 3.2vw, 36px)/1.1 var(--font-display); letter-spacing: -0.02em; margin: 0 0 10px; text-wrap: balance; }
+      .sub { color: var(--muted); margin: 0 0 32px; max-width: 62ch; }
+
+      /* download cards */
+      .downloads { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .card {
+        background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 26px;
+        display: flex; flex-direction: column; gap: 16px;
+      }
+      .card-head { display: flex; align-items: center; gap: 14px; }
+      .os-icon {
+        width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center;
+        background: rgba(124, 92, 255, 0.14); color: var(--text);
+      }
+      .os-icon svg { width: 26px; height: 26px; }
+      .card h3 { font: 800 22px/1.15 var(--font-display); margin: 0; }
+      .card .file { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+      .chip { font-size: 12.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--text); }
+      .chip.ok { border-color: rgba(62, 207, 142, 0.45); color: var(--ok); }
+      .chip.no { color: var(--muted); }
+      .card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+      .card ul li + li { margin-top: 4px; }
+      .card .btn { justify-content: center; margin-top: auto; }
+      .note {
+        font-size: 13.5px; color: var(--muted); border-left: 3px solid var(--purple);
+        background: rgba(124, 92, 255, 0.07); padding: 10px 12px; border-radius: 0 8px 8px 0;
+      }
+      .note b { color: var(--text); }
+
+      /* features */
+      .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+      .feature { background: var(--ink); padding: 24px; }
+      .feature h4 { font: 700 17px/1.25 var(--font-display); margin: 0 0 6px; }
+      .feature p { margin: 0; color: var(--muted); font-size: 14.5px; }
+      .feature .k { font: 800 12px/1 var(--font-display); letter-spacing: 0.08em; color: var(--pink); margin-bottom: 12px; display: block; }
+
+      /* steps + requirements */
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+      ol.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 16px; }
+      ol.steps li { counter-increment: s; display: grid; grid-template-columns: 36px 1fr; gap: 14px; }
+      ol.steps li::before {
+        content: counter(s); width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;
+        font: 800 15px/1 var(--font-display); background: var(--panel); border: 1px solid var(--line);
+      }
+      ol.steps b { display: block; font-family: var(--font-display); font-size: 16px; }
+      ol.steps span { color: var(--muted); font-size: 14.5px; }
+      dl.req { margin: 0; display: grid; gap: 14px; }
+      dl.req div { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+      dl.req dt { font-weight: 700; margin-bottom: 4px; }
+      dl.req dd { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+      footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 13px; }
+      footer .row { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+
+      @media (max-width: 880px) {
+        .hero, .downloads, .two { grid-template-columns: 1fr; }
+        .features { grid-template-columns: 1fr 1fr; }
+      }
+      @media (max-width: 520px) {
+        .features { grid-template-columns: 1fr; }
+        nav .navlink { display: none; }
+        .btn { width: 100%; justify-content: center; }
+      }
+      @media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:hover { transform: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="glow" aria-hidden="true"></div>
+    <header class="wrap">
+      <nav>
+        <a class="brand" href="#" aria-label="PORTZEN Studio"><img src="assets/wordmark-white.png" alt="PORTZEN Studio" /></a>
+        <div class="spacer"></div>
+        <a class="navlink" href="#download" data-i18n="navDownload">İndir</a>
+        <a class="navlink" href="#how" data-i18n="navHow">Nasıl çalışır</a>
+        <div class="lang" role="group" aria-label="Dil / Language">
+          <button type="button" id="lang-tr" aria-pressed="true">TR</button>
+          <button type="button" id="lang-en" aria-pressed="false">EN</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <div class="hero">
+        <div>
+          <span class="badge"><i></i><span data-i18n="badge">Ücretsiz · Sürüm 0.2.1</span></span>
+          <h1 data-i18n-html="title">Videonu <em>Claude</em> tasarlasın, sen düzenle.</h1>
+          <p class="lead" data-i18n="lead">
+            PORTZEN Studio, yapay zekanın Reels, TikTok ve Shorts videolarını tasarladığı, senin de yazıyı sürükleyip klibi kırparak bir video editöründe düzenlediğin masaüstü uygulaması.
+          </p>
+          <div class="cta">
+            <a class="btn primary dl-win" href="#download">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.4 10.4 4.3v7.1H3V5.4Zm0 13.2 7.4 1.1v-7H3v5.9Zm8.4 1.3L21 21.3v-8.4h-9.6v7Zm0-15.8v7.3H21V2.7l-9.6 1.4Z"/></svg>
+              <span data-i18n="btnWin">Windows için indir</span>
+            </a>
+            <a class="btn secondary dl-mac" href="#download">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-1.9-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1.1-2.8-4.3ZM14 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg>
+              <span data-i18n="btnMac">Mac için indir (M1–M4)</span>
+            </a>
+          </div>
+          <p class="meta" data-i18n="heroMeta">Windows 10/11 (64-bit) · macOS 12+ Apple Silicon · Hesap açmadan, reklamsız</p>
+        </div>
+        <div class="shot">
+          <img src="assets/screenshot.webp" width="1500" height="893" alt="PORTZEN Studio: solda Claude, sağda önizleme, tasarım paneli ve zaman çizelgesi" data-i18n-alt="shotAlt" />
+        </div>
+      </div>
+
+      <section id="download">
+        <h2 data-i18n="dlTitle">İndir</h2>
+        <p class="sub" data-i18n="dlSub">Bilgisayarına uygun sürümü seç. İki sürüm de aynı özelliklere sahip ve tamamen ücretsiz.</p>
+        <div class="downloads">
+          <article class="card">
+            <div class="card-head">
+              <div class="os-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.4 10.4 4.3v7.1H3V5.4Zm0 13.2 7.4 1.1v-7H3v5.9Zm8.4 1.3L21 21.3v-8.4h-9.6v7Zm0-15.8v7.3H21V2.7l-9.6 1.4Z"/></svg></div>
+              <div>
+                <h3>Windows</h3>
+                <div class="file" id="win-file">PORTZEN-Studio-Windows-Setup.exe · 187 MB</div>
+              </div>
+            </div>
+            <div class="chips">
+              <span class="chip ok" data-i18n="winChip1">Windows 10 ve 11</span>
+              <span class="chip ok" data-i18n="winChip2">64-bit Intel / AMD</span>
+              <span class="chip no" data-i18n="winChip3">ARM işlemciler desteklenmiyor</span>
+            </div>
+            <ul>
+              <li data-i18n="winStep1">İndirdiğin dosyayı aç, kurulum sihirbazını takip et.</li>
+              <li data-i18n="winStep2">Masaüstüne ve Başlat menüsüne kısayol eklenir.</li>
+            </ul>
+            <p class="note" data-i18n-html="winNote"><b>İlk açılışta</b> "Windows bilgisayarınızı korudu" uyarısı çıkarsa <b>Ek bilgi → Yine de çalıştır</b>'a tıkla.</p>
+            <a class="btn primary dl-win" href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+              <span data-i18n="dlWin">Windows için indir (.exe)</span>
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div class="os-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-1.9-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1.1-2.8-4.3ZM14 5.3c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z"/></svg></div>
+              <div>
+                <h3 data-i18n="macTitle">Mac (Apple Silicon)</h3>
+                <div class="file" id="mac-file">PORTZEN-Studio-Mac.dmg · 195 MB</div>
+              </div>
+            </div>
+            <div class="chips">
+              <span class="chip ok" data-i18n="macChip1">M1, M2, M3, M4 çipli Mac'ler</span>
+              <span class="chip ok" data-i18n="macChip2">macOS 12 veya üstü</span>
+              <span class="chip no" data-i18n="macChip3">Intel Mac desteği yakında</span>
+            </div>
+            <ul>
+              <li data-i18n="macStep1">DMG dosyasını aç, PORTZEN Studio'yu Uygulamalar klasörüne sürükle.</li>
+              <li data-i18n="macStep2">Mac'inin çipini öğrenmek için: Apple menüsü → Bu Mac Hakkında → "Çip".</li>
+            </ul>
+            <p class="note" data-i18n-html="macNote"><b>İlk açılışta</b> "açılamıyor" uyarısı çıkarsa <b>Sistem Ayarları → Gizlilik ve Güvenlik</b>'e gidip <b>Yine de Aç</b>'a tıkla.</p>
+            <a class="btn primary dl-mac" href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+              <span data-i18n="dlMac">Mac için indir (.dmg)</span>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2 data-i18n="featTitle">Neler yapabilirsin</h2>
+        <p class="sub" data-i18n="featSub">Claude videoyu kodla tasarlar, sen sonucu bir video editöründe görür ve elle düzeltirsin. İkiniz aynı projede çalışırsınız.</p>
+        <div class="features">
+          <div class="feature"><span class="k">01</span><h4 data-i18n="f1t">Yaz, videoyu görsün</h4><p data-i18n="f1d">Ne istediğini Türkçe anlat; kinetik yazılar, geçişler ve grafiklerle video anında önizlemede belirir.</p></div>
+          <div class="feature"><span class="k">02</span><h4 data-i18n="f2t">Elle düzenle</h4><p data-i18n="f2d">Yazıyı sürükle, rengini ve fontunu değiştir, klibi zaman çizelgesinde kırp. Claude senin değişikliklerini korur.</p></div>
+          <div class="feature"><span class="k">03</span><h4 data-i18n="f3t">Seç ve söyle</h4><p data-i18n="f3d">Bir öğeye tıklayıp "bunu büyüt" demen yeterli; Claude hangi öğeyi kastettiğini bilir.</p></div>
+          <div class="feature"><span class="k">04</span><h4 data-i18n="f4t">Hazır şablonlar</h4><p data-i18n="f4d">Reels hook, ürün tanıtımı, sayılarla anlat, alıntı kartı ve altyazılı video şablonlarıyla başla.</p></div>
+          <div class="feature"><span class="k">05</span><h4 data-i18n="f5t">Tek tıkla kontrol</h4><p data-i18n="f5d">Küçük yazı, boş alan ya da kaybolan CTA gibi sorunları bulur; tek tuşla Claude'a düzelttirirsin.</p></div>
+          <div class="feature"><span class="k">06</span><h4 data-i18n="f6t">Marka kiti</h4><p data-i18n="f6d">Renklerini, fontunu ve logonu bir kez gir; her videoda otomatik kullanılır. Videolar MP4 olarak dışa aktarılır.</p></div>
+        </div>
+      </section>
+
+      <section id="how">
+        <div class="two">
+          <div>
+            <h2 data-i18n="howTitle">Nasıl çalışır</h2>
+            <p class="sub" data-i18n="howSub">Kurulumdan ilk videoya birkaç dakika.</p>
+            <ol class="steps">
+              <li><div><b data-i18n="s1t">Kur ve aç</b><span data-i18n="s1d">Uygulamayı indirip kur. Yeni bir video oluştur ya da kendi klasörünü bağla.</span></div></li>
+              <li><div><b data-i18n="s2t">Claude'a bağlan</b><span data-i18n="s2d">Uygulama Claude Code'u tek tıkla kurar; kendi Claude hesabınla giriş yaparsın.</span></div></li>
+              <li><div><b data-i18n="s3t">Anlat, düzenle, dışa aktar</b><span data-i18n="s3d">Videonu anlat, editörde ince ayar yap, "Dışa aktar (MP4)" ile kaydet.</span></div></li>
+            </ol>
+          </div>
+          <div>
+            <h2 data-i18n="reqTitle">Gerekenler</h2>
+            <p class="sub" data-i18n="reqSub">Başka bir program kurman gerekmiyor.</p>
+            <dl class="req">
+              <div><dt data-i18n="r1t">Claude hesabı</dt><dd data-i18n="r1d">Claude Pro veya Max aboneliği ya da bir Anthropic API anahtarı. Hesabın sende kalır; PORTZEN Studio şifrene veya oturumuna erişmez.</dd></div>
+              <div><dt data-i18n="r2t">İnternet bağlantısı</dt><dd data-i18n="r2d">Claude için gerekir. Videoların tamamen kendi bilgisayarında üretilir, dosyaların hiçbir yere yüklenmez.</dd></div>
+              <div><dt data-i18n="r3t">Disk alanı</dt><dd data-i18n="r3d">Kurulum için yaklaşık 600 MB. İlk dışa aktarmada render için bir tarayıcı bileşeni indirilir.</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <div class="row">
+        <span>© 2026 PORTZEN · <span data-i18n="footFree">PORTZEN Studio ücretsizdir.</span></span>
+        <span data-i18n="footLegal">Açık kaynak bileşenlerin lisansları uygulamada Yardım → Lisanslar menüsündedir. Claude, Anthropic'in markasıdır; PORTZEN Studio Anthropic ile bağlantılı değildir.</span>
+      </div>
+    </footer>
+
+    <script>
+      // Download links: change only these two lines when a new version is published.
+      var DOWNLOADS = {
+        win: "https://github.com/ardakaya7440-svg/portzen-studio/releases/latest/download/PORTZEN-Studio-Windows-Setup.exe",
+        mac: "https://github.com/ardakaya7440-svg/portzen-studio/releases/latest/download/PORTZEN-Studio-Mac.dmg"
+      };
+
+      var EN = {
+        navDownload: "Download",
+        navHow: "How it works",
+        badge: "Free · Version 0.2.1",
+        title: "Let <em>Claude</em> design your video. You edit it.",
+        lead: "PORTZEN Studio is a desktop app where AI designs your Reels, TikTok and Shorts videos, and you fine-tune them in a real video editor: drag the text, trim the clip, change the colors.",
+        btnWin: "Download for Windows",
+        btnMac: "Download for Mac (M1–M4)",
+        heroMeta: "Windows 10/11 (64-bit) · macOS 12+ on Apple Silicon · No sign-up, no ads",
+        shotAlt: "PORTZEN Studio: Claude on the left; preview, design panel and timeline on the right",
+        dlTitle: "Download",
+        dlSub: "Pick the version for your computer. Both have the same features and are completely free.",
+        winChip1: "Windows 10 and 11",
+        winChip2: "64-bit Intel / AMD",
+        winChip3: "ARM processors not supported",
+        winStep1: "Open the downloaded file and follow the setup wizard.",
+        winStep2: "Shortcuts are added to your desktop and Start menu.",
+        winNote: "<b>On first launch</b>, if you see \"Windows protected your PC\", click <b>More info → Run anyway</b>.",
+        dlWin: "Download for Windows (.exe)",
+        macTitle: "Mac (Apple Silicon)",
+        macChip1: "Macs with M1, M2, M3, M4",
+        macChip2: "macOS 12 or later",
+        macChip3: "Intel Mac support coming soon",
+        macStep1: "Open the DMG and drag PORTZEN Studio into Applications.",
+        macStep2: "To check your chip: Apple menu → About This Mac → \"Chip\".",
+        macNote: "<b>On first launch</b>, if macOS says the app can't be opened, go to <b>System Settings → Privacy & Security</b> and click <b>Open Anyway</b>.",
+        dlMac: "Download for Mac (.dmg)",
+        featTitle: "What you can do",
+        featSub: "Claude designs the video in code; you see it in a video editor and fix things by hand. You both work on the same project.",
+        f1t: "Describe it, see it",
+        f1d: "Say what you want in plain words; kinetic type, transitions and graphics appear in the preview right away.",
+        f2t: "Edit by hand",
+        f2d: "Drag text, change colors and fonts, trim clips on the timeline. Claude keeps your manual edits.",
+        f3t: "Select and say",
+        f3d: "Click an element and say \"make this bigger\"; Claude knows exactly which one you mean.",
+        f4t: "Ready templates",
+        f4d: "Start from a Reels hook, product promo, numbers story, quote card or captioned video.",
+        f5t: "One-click check",
+        f5d: "Finds tiny text, empty areas or a disappearing CTA; one click sends the fixes to Claude.",
+        f6t: "Brand kit",
+        f6d: "Enter your colors, font and logo once; every video uses them. Export as MP4.",
+        howTitle: "How it works",
+        howSub: "From install to your first video in minutes.",
+        s1t: "Install and open",
+        s1d: "Download and install the app. Create a new video or connect your own folder.",
+        s2t: "Connect Claude",
+        s2d: "The app installs Claude Code in one click; you sign in with your own Claude account.",
+        s3t: "Describe, edit, export",
+        s3d: "Describe your video, fine-tune it in the editor, save it with \"Export (MP4)\".",
+        reqTitle: "What you need",
+        reqSub: "No other software to install.",
+        r1t: "A Claude account",
+        r1d: "A Claude Pro or Max subscription, or an Anthropic API key. Your account stays yours; PORTZEN Studio never sees your password or session.",
+        r2t: "An internet connection",
+        r2d: "Needed for Claude. Your videos are made entirely on your computer; your files are never uploaded.",
+        r3t: "Disk space",
+        r3d: "About 600 MB for the app. The first export downloads a render browser component.",
+        footFree: "PORTZEN Studio is free.",
+        footLegal: "Licenses of open-source components are in the app under Help → Licenses. Claude is a trademark of Anthropic; PORTZEN Studio is not affiliated with Anthropic."
+      };
+
+      var TR = {};
+      document.querySelectorAll("[data-i18n]").forEach(function (el) { TR[el.dataset.i18n] = el.textContent.trim(); });
+      document.querySelectorAll("[data-i18n-html]").forEach(function (el) { TR[el.dataset.i18nHtml] = el.innerHTML.trim(); });
+      document.querySelectorAll("[data-i18n-alt]").forEach(function (el) { TR[el.dataset.i18nAlt] = el.alt; });
+      var META_TR = { title: document.title, desc: document.querySelector('meta[name="description"]').content };
+
+      function setLang(lang) {
+        var D = lang === "en" ? EN : TR;
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-i18n]").forEach(function (el) { if (D[el.dataset.i18n]) el.textContent = D[el.dataset.i18n]; });
+        document.querySelectorAll("[data-i18n-html]").forEach(function (el) { if (D[el.dataset.i18nHtml]) el.innerHTML = D[el.dataset.i18nHtml]; });
+        document.querySelectorAll("[data-i18n-alt]").forEach(function (el) { if (D[el.dataset.i18nAlt]) el.alt = D[el.dataset.i18nAlt]; });
+        document.title = lang === "en" ? "Download PORTZEN Studio" : META_TR.title;
+        document.getElementById("lang-tr").setAttribute("aria-pressed", lang === "tr");
+        document.getElementById("lang-en").setAttribute("aria-pressed", lang === "en");
+        try { localStorage.setItem("pz-lang", lang); } catch (e) {}
+      }
+      document.getElementById("lang-tr").onclick = function () { setLang("tr"); };
+      document.getElementById("lang-en").onclick = function () { setLang("en"); };
+
+      document.querySelectorAll(".dl-win").forEach(function (a) { a.href = DOWNLOADS.win; });
+      document.querySelectorAll(".dl-mac").forEach(function (a) { a.href = DOWNLOADS.mac; });
+
+      var q = new URLSearchParams(location.search).get("lang");
+      var saved = null;
+      try { saved = localStorage.getItem("pz-lang"); } catch (e) {}
+      var initial = q || saved || ((navigator.language || "tr").toLowerCase().indexOf("tr") === 0 ? "tr" : "en");
+      setLang(initial === "en" ? "en" : "tr");
+    </script>
+  </body>
+</html>
